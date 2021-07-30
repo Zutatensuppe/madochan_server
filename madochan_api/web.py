@@ -60,11 +60,11 @@ async def list_tags_prefixes(data: dict):
     model = data.get('model', None)
     definition = data.get('definition', None)
     if not definition:
-        return ""
+        return {"word": ""}
 
     gen = Madochan()
     gen.weirdness = data.get('weirdness', 1) or 1
     if model:
         gen.change_model(load_model(model))
     new_word = gen.create_word(definition)
-    return new_word
+    return {"word": new_word}

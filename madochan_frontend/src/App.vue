@@ -1,5 +1,5 @@
 <template>
-  <Control v-if="settings" :settings="settings" />
+  <Control :settings="settings" />
 </template>
 
 <script lang="ts">
@@ -14,7 +14,10 @@ export default defineComponent({
   },
   data() {
     return {
-      settings: null,
+      settings: {
+        model: [],
+        weirdness: [],
+      },
     };
   },
   async created() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="settings.model && settings.weirdness">
     <h1 class="title">madochan</h1>
     <form class="form">
       <div class="field">
@@ -8,7 +8,7 @@
           <div class="select">
             <select v-model="model">
               <option value="">Select a Model</option>
-              <option v-for="(m, idx) in settings.model" :key="idx" :value="m">
+              <option v-for="m in settings.model" :value="m">
                 {{ m }}
               </option>
             </select>
@@ -21,11 +21,7 @@
           <div class="select">
             <select v-model="weirdness">
               <option value="">Select a Weirdness</option>
-              <option
-                v-for="(w, idx) in settings.weirdness"
-                :key="idx"
-                :value="w"
-              >
+              <option v-for="w in settings.weirdness" :value="w">
                 {{ w }}
               </option>
             </select>
@@ -43,6 +39,8 @@
         </div>
       </div>
       <span class="button" type="button" @click="onSubmit">Generate Word!</span>
+
+      <div v-if="word">{{ word }}</div>
     </form>
   </div>
 </template>
@@ -63,11 +61,11 @@ export default defineComponent({
       model: "",
       weirdness: 1,
       definition: "",
+      word: "",
     };
   },
   mounted() {
     this.model = this.settings.model[0] || "";
-    console.log(this.settings.model[0]);
     this.weirdness = this.settings.weirdness[0] || 1;
   },
   methods: {
@@ -83,7 +81,8 @@ export default defineComponent({
           definition: this.definition,
         }),
       });
-      this.settings = await res.json();
+      const data = await res.json();
+      this.word = data.word;
     },
   },
 });
