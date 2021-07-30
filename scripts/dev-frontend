@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+cd "$RUN_DIR/madochan_frontend"
+
+npm run dev

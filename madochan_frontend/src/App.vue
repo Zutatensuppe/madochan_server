@@ -1,0 +1,31 @@
+<template>
+  <Control v-if="settings" :settings="settings" />
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import Control from "./components/Control.vue";
+import config from "./config";
+
+export default defineComponent({
+  name: "App",
+  components: {
+    Control,
+  },
+  data() {
+    return {
+      settings: null,
+    };
+  },
+  async created() {
+    const res = await fetch(`${config.api_url}/settings`, {
+      method: "GET",
+    });
+    this.settings = await res.json();
+  },
+});
+</script>
+
+<style>
+@import "bulma/css/bulma.css";
+</style>

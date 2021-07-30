@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+cd "$RUN_DIR"
+
+poetry run uvicorn madochan_api:app --reload

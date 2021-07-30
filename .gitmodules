@@ -1,0 +1,3 @@
+[submodule "madochan"]
+	path = madochan
+	url = https://github.com/HylisWilk/madochan
