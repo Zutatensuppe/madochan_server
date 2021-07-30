@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="settings.model && settings.weirdness">
+  <div class="card p-4" v-if="settings.model && settings.weirdness">
     <h1 class="title">madochan</h1>
     <form class="form">
       <div class="field">

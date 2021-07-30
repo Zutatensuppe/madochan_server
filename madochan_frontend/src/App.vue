@@ -1,5 +1,15 @@
 <template>
-  <Control :settings="settings" />
+  <div class="container">
+    <Control :settings="settings" />
+    <div class="footer">
+      Powered by
+      <a href="https://github.com/HylisWilk/madochan" target="_blank"
+        >madochan</a
+      >
+      made by
+      <a href="https://twitch.tv/bacing" target="_blank">bacing</a>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
