@@ -38,16 +38,23 @@
           ></textarea>
         </div>
       </div>
-      <span class="button" type="button" @click="onSubmit">Generate Word!</span>
+      <span
+        class="button"
+        :class="{ 'is-loading': loading }"
+        type="button"
+        @click="onSubmit"
+        >Generate Word!</span
+      >
 
-      <div v-if="word">{{ word }}</div>
+      <div class="title" v-if="word">{{ word }}</div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import config from "../config";
+import api from "../api";
+
 export default defineComponent({
   name: "HelloWorld",
   props: {
@@ -62,7 +69,17 @@ export default defineComponent({
       weirdness: 1,
       definition: "",
       word: "",
+      loading: false,
     };
+  },
+  watch: {
+    settings: {
+      handler() {
+        this.model = this.settings.model[0] || "";
+        this.weirdness = this.settings.weirdness[0] || 1;
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.model = this.settings.model[0] || "";
@@ -70,18 +87,16 @@ export default defineComponent({
   },
   methods: {
     async onSubmit() {
-      const res = await fetch(`${config.api_url}/_create_word`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-          model: this.model,
-          weirdness: this.weirdness,
-          definition: this.definition,
-        }),
+      if (this.loading) {
+        return;
+      }
+      this.loading = true;
+      const data = await api.createWord({
+        model: this.model,
+        weirdness: this.weirdness,
+        definition: this.definition,
       });
-      const data = await res.json();
+      this.loading = false;
       this.word = data.word;
     },
   },

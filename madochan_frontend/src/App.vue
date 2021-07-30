@@ -5,7 +5,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Control from "./components/Control.vue";
-import config from "./config";
+import api from "./api";
 
 export default defineComponent({
   name: "App",
@@ -21,10 +21,7 @@ export default defineComponent({
     };
   },
   async created() {
-    const res = await fetch(`${config.api_url}/settings`, {
-      method: "GET",
-    });
-    this.settings = await res.json();
+    this.settings = await api.getSettings();
   },
 });
 </script>

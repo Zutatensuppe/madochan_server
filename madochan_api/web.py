@@ -50,7 +50,7 @@ def load_model(modelfile):
 async def get_settings():
     return {
         "model": models(),
-        "weirdness": [1, 2, 3],
+        "weirdness": [i for i in range(1, 21)],
     }
 
 
@@ -61,10 +61,11 @@ async def list_tags_prefixes(data: dict):
     definition = data.get('definition', None)
     if not definition:
         return {"word": ""}
+    if not model:
+        return {"word": ""}
 
-    gen = Madochan()
+    # needs change in madochan repo
+    gen = Madochan(load_model(model))
     gen.weirdness = data.get('weirdness', 1) or 1
-    if model:
-        gen.change_model(load_model(model))
     new_word = gen.create_word(definition)
     return {"word": new_word}
