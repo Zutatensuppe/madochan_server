@@ -56,7 +56,6 @@ import { defineComponent } from "vue";
 import api from "../api";
 
 export default defineComponent({
-  name: "HelloWorld",
   props: {
     settings: {
       type: Object,
