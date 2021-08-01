@@ -42,11 +42,13 @@
         class="button"
         :class="{ 'is-loading': loading }"
         type="button"
+        :disabled="!definition ? true : null"
         @click="onSubmit"
         >Generate Word!</span
       >
 
       <div class="title" v-if="word">{{ word }}</div>
+      <div class="has-text-danger" v-if="error">{{ error }}</div>
     </form>
   </div>
 </template>
@@ -68,6 +70,7 @@ export default defineComponent({
       weirdness: 1,
       definition: "",
       word: "",
+      error: "",
       loading: false,
     };
   },
@@ -90,13 +93,19 @@ export default defineComponent({
         return;
       }
       this.loading = true;
-      const data = await api.createWord({
-        model: this.model,
-        weirdness: this.weirdness,
-        definition: this.definition,
-      });
+      this.error = "";
+      try {
+        const data = await api.createWord({
+          model: this.model,
+          weirdness: this.weirdness,
+          definition: this.definition,
+        });
+        this.word = data.word;
+      } catch (e) {
+        this.word = "";
+        this.error = "No word could be created due to a server error: " + e;
+      }
       this.loading = false;
-      this.word = data.word;
     },
   },
 });

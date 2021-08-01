@@ -1,7 +1,9 @@
+from anycache import anycache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import glob
+import time
 
 # silence tensorflow
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # or any {'0', '1', '2'}
@@ -54,9 +56,8 @@ async def get_settings():
     }
 
 
-
 @app.post(api_base + "/_create_word")
-async def list_tags_prefixes(data: dict):
+async def create_word(data: dict):
     model = data.get('model', None)
     definition = data.get('definition', None)
     if not definition:
@@ -64,8 +65,28 @@ async def list_tags_prefixes(data: dict):
     if not model:
         return {"word": ""}
 
-    # needs change in madochan repo
-    gen = Madochan(load_model(model))
+
+    start = time.time()
+
+    m = load_model(model)
+
+    end = time.time()
+    print(f"loading model took: {end - start}")
+    start = end
+
+    # passing model into madochan needs change in madochan repo
+    gen = Madochan(m)
+
+    end = time.time()
+    print(f"init madochan took: {end - start}")
+    start = end
+
     gen.weirdness = data.get('weirdness', 1) or 1
     new_word = gen.create_word(definition)
+
+
+    end = time.time()
+    print(f"generating word took: {end - start}")
+    start = end
+
     return {"word": new_word}
